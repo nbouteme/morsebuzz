@@ -1,0 +1,30 @@
+
+int isbuzzing;
+int elapsed;
+
+void setup() {
+  int isbuzzing = 0;
+  pinMode(9, OUTPUT);
+  pinMode(8, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int bs = digitalRead(8);
+  if (bs && !isbuzzing) {
+    tone(9, 1000);
+    isbuzzing = 1;
+    c[0] = 1;
+    Serial.write(c, 1);
+    elapsed = micros();
+  }
+  if (!bs && isbuzzing) {
+    noTone(9);
+    isbuzzing = 0;
+    c[0] = 0;
+    Serial.write(c, 1);
+    elapsed = micros() - elapsed;
+  }
+  digitalWrite(LED_BUILTIN, bs);
+}

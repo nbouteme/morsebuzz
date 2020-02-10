@@ -1,0 +1,83 @@
+
+int isbuzzing;
+int elapsed;
+
+const char *alph[] = {
+  ".-",
+  "-...",
+  "-.-.",
+  "-..",
+  ".",
+  "..-.",
+  "--.",
+  "....",
+  "..",
+  ".---",
+  "-.-",
+  ".-..",
+  "--",
+  "-.",
+  "---",
+  ".--.",
+  "--.-",
+  ".-.",
+  "...",
+  "-",
+  "..-",
+  "...-",
+  ".--",
+  "-..-",
+  "-.--",
+  "--.."
+};
+
+
+const char *digits[] =  {
+"-----",
+".----",
+"..---",
+"...--",
+"....-",
+".....",
+"-....",
+"--...",
+"---..",
+"----.",
+};
+
+
+void setup() {
+  int isbuzzing = 0;
+  pinMode(9, OUTPUT);
+  pinMode(8, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+  Serial.begin(9600);
+}
+
+const char *current = 0;
+
+void loop() {
+  if (current && *current) {
+    while (*current) {
+      if (*current == '.') {
+        tone(9, 1000);
+        delay(100);
+      }
+      else if (*current == '-') {
+        tone(9, 1000);
+        delay(400);
+      }
+      noTone(9);
+      delay(100);
+      current++;
+    }
+    delay(1000);
+  } else {
+    char c = Serial.read();
+    c = toupper(c);
+    if (c >= 'A' && c <= 'Z')
+      current = alph[c - 'A'];
+    if (c >= '0' && c <= '9')
+      current = digits[c - '0'];
+  }
+}
